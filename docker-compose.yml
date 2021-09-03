@@ -7,3 +7,21 @@ services:
     environment:
       POSTGRES_PASSWORD: "challenge"
       POSTGRES_DB: "challenge"
+    networks:
+      - postgres-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "16543:80"
+    networks:
+      - postgres-network
+    depends_on:
+      - db
+  
+networks: 
+  postgres-network:
+    driver: bridge
