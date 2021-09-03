@@ -1,5 +1,10 @@
 from django.shortcuts import render
 
+from drf_yasg.utils import swagger_auto_schema
+
+from django.utils.decorators import method_decorator
+
+
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView
 from rest_framework.generics import CreateAPIView
@@ -32,7 +37,9 @@ class DeleteAuthorAPIView(DestroyAPIView):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
 
+
 class AuthorViewSet(viewsets.ModelViewSet):
+    
     authentication_classes = [JWTAuthentication]
     
     queryset = Author.objects.all()
