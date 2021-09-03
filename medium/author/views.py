@@ -6,14 +6,10 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.generics import DestroyAPIView
 from rest_framework.generics import UpdateAPIView
 
-from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from author.serializers import AuthorSerializer
 from author.models import Author
-
-#from rest_framework.permissions import IsAuthenicated, AllowAny
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 # Create your views here.
 class ListAuthorAPIView(ListAPIView):
@@ -37,11 +33,7 @@ class DeleteAuthorAPIView(DestroyAPIView):
     serializer_class = AuthorSerializer
 
 class AuthorViewSet(viewsets.ModelViewSet):
-    #permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
     
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-
-#class ExampleView(APIView):
-    #permission_classes = [IsAuthenicated]

@@ -4,7 +4,7 @@ from author.models import Author
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = "__all__"
+        fields = ['id', 'name', 'picture']
         extra_kwargs = {
             "name": {"required": True},
             "picture": {"required": True}

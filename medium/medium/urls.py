@@ -25,9 +25,12 @@ from drf_yasg.views import get_schema_view
 from rest_framework_simplejwt import views
 
 from author.views import AuthorViewSet
+from article.views import ArticleViewSet
 
 router = routers.DefaultRouter()
 router.register(r"authors", AuthorViewSet)
+router.register(r"articles", ArticleViewSet)
+
 
 schema_view = get_schema_view(
     openapi.Info(
