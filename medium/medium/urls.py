@@ -17,20 +17,36 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
+from rest_framework import routers
+from rest_framework import permissions
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+
 from rest_framework_simplejwt import views
 
 from author.views import AuthorViewSet
 
-from rest_framework import routers
-
 router = routers.DefaultRouter()
 router.register(r"authors", AuthorViewSet)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="API Docs",
+        default_version="v1",
+        description="Helping to use API",
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny, ),
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/admin/', include(router.urls)),
     path('login/', views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('signup/', include('auth.urls'))
+    path('signup/', include('auth.urls')),
+
+    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0)),
 
 
     #path('api/authors/', include("author.urls"))
