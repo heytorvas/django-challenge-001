@@ -14,6 +14,8 @@ from article.serializers import AnonymousArticleSerializer, ArticleSerializer, A
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
+    """This endpoint allows post, get, put, patch and delete of article from database"""
+
     authentication_classes = [JWTAuthentication]
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer

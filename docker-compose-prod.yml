@@ -1,5 +1,12 @@
 version: '3.0'
 services:
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - api_prod
+      
   db_prod:
     container_name: db_prod
     image: postgres:12
@@ -11,28 +18,28 @@ services:
     networks:
       - postgres_network_prod
 
-  pgadmin:
-    container_name: pgadmin
+  pgadmin_prod:
+    container_name: pgadmin_prod
     image: dpage/pgadmin4
     env_file:
       - .env
     ports:
-      - "16543:80"
+      - "12345:80"
     networks:
       - postgres_network_prod
     depends_on:
       - db_prod
 
-  api:
-    container_name: api
+  api_prod:
+    container_name: api_prod
     build: ./medium/
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && gunicorn medium.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
       - ./medium/:/usr/src/medium/
     depends_on:
-      - db
+      - db_prod
     links:
       - db_prod:db_prod
     networks:
