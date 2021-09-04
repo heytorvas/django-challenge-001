@@ -1,6 +1,7 @@
 version: '3.0'
 services:
   db:
+    container_name: db
     image: postgres:12
     ports:
       - "5432:5432"
@@ -11,6 +12,7 @@ services:
       - postgres-network
 
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
@@ -21,6 +23,21 @@ services:
       - postgres-network
     depends_on:
       - db
+
+  api:
+    container_name: api
+    build: ./medium/
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./medium/:/usr/src/medium/
+    depends_on:
+      - db
+    links:
+      - db:db
+    networks:
+      - postgres-network
   
 networks: 
   postgres-network:
