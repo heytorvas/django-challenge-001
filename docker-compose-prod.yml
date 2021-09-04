@@ -6,6 +6,12 @@ services:
       - 80:80
     depends_on:
       - api_prod
+    links:
+      - api_prod:api_prod
+    networks:
+      - postgres_network_prod
+    volumes:
+      - static_volume:/usr/src/medium/static/
       
   db_prod:
     container_name: db_prod
@@ -33,11 +39,12 @@ services:
   api_prod:
     container_name: api_prod
     build: ./medium/
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && gunicorn medium.wsgi:application --bind 0.0.0.0:8000"
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic && gunicorn medium.wsgi:application --bind 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
       - ./medium/:/usr/src/medium/
+      - static_volume:/usr/src/medium/static/
     depends_on:
       - db_prod
     links:
@@ -51,3 +58,6 @@ services:
 networks: 
   postgres_network_prod:
     driver: bridge
+
+volumes:
+  static_volume:
