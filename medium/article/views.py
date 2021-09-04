@@ -1,29 +1,26 @@
-from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.openapi import Parameter, IN_QUERY, TYPE_STRING
 
-from author.serializers import AuthorSerializer
 from django.shortcuts import render
 
+from rest_framework import permissions, viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-
-from rest_framework import permissions, viewsets, views, status
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from article.models import Article
 from article.serializers import AnonymousArticleSerializer, ArticleSerializer, ArticleSlugSerializer, LoggedArticleSerializer
 
-# Create your views here.
+
 class ArticleViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
-
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     
 
 class ArticleByCategory(views.APIView):
+    """This endpoint list all articles filtered by category from the database"""
     permission_classes = [permissions.AllowAny]
     serializer_class = ArticleSlugSerializer
 
@@ -40,6 +37,7 @@ class ArticleByCategory(views.APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GetByIdArticles(views.APIView):
+    """This endpoint returns specific article filtered by id from the database"""
     permission_classes = [permissions.AllowAny]
     authentication_classes = [JWTAuthentication]
 

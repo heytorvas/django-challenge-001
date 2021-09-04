@@ -1,6 +1,6 @@
-from django.conf.urls import url
-from django.urls import path, include
+from django.urls import path
 from auth.views import RegisterApi
+
 urlpatterns = [
       path('', RegisterApi.as_view()),
 ]

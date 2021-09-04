@@ -1,0 +1,46 @@
+version: '3.0'
+services:
+  db_prod:
+    container_name: db_prod
+    image: postgres:12
+    ports:
+      - "5433:5433"
+    env_file:
+      - .env
+      - prod.env
+    networks:
+      - postgres_network_prod
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    ports:
+      - "16543:80"
+    networks:
+      - postgres_network_prod
+    depends_on:
+      - db_prod
+
+  api:
+    container_name: api
+    build: ./medium/
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./medium/:/usr/src/medium/
+    depends_on:
+      - db
+    links:
+      - db_prod:db_prod
+    networks:
+      - postgres_network_prod
+    env_file:
+      - .env
+      - prod.env
+  
+networks: 
+  postgres_network_prod:
+    driver: bridge

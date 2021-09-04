@@ -1,9 +1,7 @@
 from author.serializers import AuthorSerializer
-from author.models import Author
-from rest_framework import serializers
 from article.models import Article
-from author.models import Author
 
+from rest_framework import serializers
 
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:

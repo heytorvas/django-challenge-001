@@ -1,12 +1,13 @@
 from django.shortcuts import render
 
-# Create your views here.
-from rest_framework import generics, permissions, mixins
+from rest_framework import generics, permissions
 from rest_framework.response import Response
+
 from auth.serializers import AuthSerializer, UserSerializer
-from django.contrib.auth.models import User
-#Register API
+
+
 class RegisterApi(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
     serializer_class = AuthSerializer
     
     def post(self, request, *args,  **kwargs):

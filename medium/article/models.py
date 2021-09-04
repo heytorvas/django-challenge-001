@@ -1,9 +1,7 @@
 import uuid
 from django.db import models
-from django.db.models.fields import related
 from author.models import Author
 
-# Create your models here.
 class Article(models.Model):
     id = models.UUIDField("id", primary_key=True, editable=False, default=uuid.uuid4)
     category = models.CharField(max_length=30)

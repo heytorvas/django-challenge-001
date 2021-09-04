@@ -1,44 +1,46 @@
 version: '3.0'
 services:
-  db:
-    container_name: db
+  db_dev:
+    container_name: db_dev
     image: postgres:12
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: "challenge"
-      POSTGRES_DB: "challenge"
+    env_file:
+      - .env
+      - dev.env
     networks:
-      - postgres-network
+      - postgres_network_dev
 
-  pgadmin:
-    container_name: pgadmin
+  pgadmin_dev:
+    container_name: pgadmin_dev
     image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
-      PGADMIN_DEFAULT_PASSWORD: "admin"
+    env_file:
+      - .env
     ports:
       - "16543:80"
     networks:
-      - postgres-network
+      - postgres_network_dev
     depends_on:
-      - db
+      - db_dev
 
-  api:
-    container_name: api
+  api_dev:
+    container_name: api_dev
     build: ./medium/
-    command: python manage.py runserver 0.0.0.0:8000
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     volumes:
       - ./medium/:/usr/src/medium/
     depends_on:
-      - db
+      - db_dev
     links:
-      - db:db
+      - db_dev:db_dev
     networks:
-      - postgres-network
+      - postgres_network_dev
+    env_file:
+      - .env
+      - dev.env
   
 networks: 
-  postgres-network:
+  postgres_network_dev:
     driver: bridge

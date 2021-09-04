@@ -36,7 +36,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="API Docs",
         default_version="v1",
-        description="Helping to use API",
+        description="API Documentation for Django Challenge",
     ),
     public=True,
     permission_classes=(permissions.AllowAny, ),
@@ -44,8 +44,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
     path('api/admin/', include(router.urls)),
-    path('login/', views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+
+    path('login/', views.TokenObtainPairView.as_view(), name='login'),
     path('signup/', include('auth.urls')),
 
     path("api/articles/", ArticleByCategory.as_view()),
