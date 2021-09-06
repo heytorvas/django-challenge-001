@@ -41,6 +41,7 @@ docker-compose -f docker-compose-prod.yml up pgadmin_prod &
 ```
 ### Notes
 - API Documentation is located on: ```http://localhost:8000/api/docs/```
+- For API authentication, the JWT token must be placed in the request header. e.g.: ```Bearer <token>```
 
 ## Description
 
